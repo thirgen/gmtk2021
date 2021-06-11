@@ -251,8 +251,14 @@ MonoBehaviour:
   Tiles:
   - Id: 120
     Material: {fileID: 2100000, guid: c6a72dabb5ca38043928eb569e18b283, type: 2}
+    BlockMovement: 0
   - Id: 111
     Material: {fileID: 2100000, guid: e512a31d6c5794a4f881f01f66c88cf4, type: 2}
+    BlockMovement: 1
+  NullTile:
+    Id: 33
+    Material: {fileID: 0}
+    BlockMovement: 1
 --- !u!4 &271062133
 Transform:
   m_ObjectHideFlags: 0

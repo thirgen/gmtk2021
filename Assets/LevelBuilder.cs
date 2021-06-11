@@ -3,15 +3,30 @@ using UnityEngine;
 
 public class LevelBuilder : MonoBehaviour
 {
+    public static LevelBuilder current;
+
     public TextAsset level;
     public TileType[] Tiles;
-    public char[,] tileMap;
+    public char[,] tileMapo;
+    public TileType NullTile = new TileType { Id = '!', BlockMovement = true, Material = null };
+    public TileType[,] tileMap;
     private static readonly char NULL_CHAR = '!';
+
+
+    private void Awake()
+    {
+        if (level == null) return;
+        if (current != null)
+        {
+            Destroy(this);
+            return;
+        }
+
+        current = this;
+    }
 
     void Start()
     {
-        if (level == null) return;
-
         BuildLevel();
     }
 
@@ -35,7 +50,7 @@ public class LevelBuilder : MonoBehaviour
             if (currentLength > zBound)
                 zBound = currentLength;
         }
-        tileMap = new char[xBound, zBound];
+        tileMap = new TileType[xBound, zBound];
     }
 
     private void PopulateTilemap(string[] lines)
@@ -45,7 +60,7 @@ public class LevelBuilder : MonoBehaviour
             string currentLine = lines[x];
             for (int z = 0; z < tileMap.GetLength(1); z++)
             {
-                tileMap[x, z] = (z >= currentLine.Length) ? NULL_CHAR : currentLine[z];
+                tileMap[x, z] = (z >= currentLine.Length) ? NullTile : GetTileType(currentLine[z]);
             }
         }
     }
@@ -58,19 +73,29 @@ public class LevelBuilder : MonoBehaviour
             currentParent.transform.SetParent(transform);
             for (int z = 0; z < tileMap.GetLength(1); z++)
             {
-                char currentChar = tileMap[x, z];
-                if (currentChar == NULL_CHAR) continue;
+                TileType currentTile = tileMap[x, z];
+                if (currentTile.Id == NullTile.Id) continue;
 
                 var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 go.transform.SetParent(currentParent.transform);
                 go.transform.position = new Vector3(z, -1f, -x);
                 go.name = $"{z}";
 
-                Material m = GetMaterial(currentChar);
+                Material m = currentTile.Material;
                 if (m != null)
                     go.GetComponent<Renderer>().material = m;
             }
         }
+    }
+
+    private TileType GetTileType(char c)
+    {
+        foreach (TileType t in Tiles)
+        {
+            if (t.Id == c)
+                return t;
+        }
+        return NullTile;
     }
 
     private Material GetMaterial(char ch)
@@ -81,5 +106,20 @@ public class LevelBuilder : MonoBehaviour
                 return t.Material;
         }
         return null;
+    }
+
+
+    public bool IsValidMove(Vector3Int position)
+    {
+        if (position.x < 0 || position.x > tileMap.GetLength(0))
+            return false;
+        if (position.y < 0 || position.y > tileMap.GetLength(1))
+            return false;
+        Debug.Log(position);
+        return tileMap[position.x, position.z].BlockMovement;
+    }
+    public bool IsValidMove(Vector3 position)
+    {
+        return IsValidMove(new Vector3Int((int)position.x, 0, (int)position.z));
     }
 }

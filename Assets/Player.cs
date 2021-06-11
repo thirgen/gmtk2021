@@ -10,10 +10,12 @@ public class Player : MonoBehaviour
     private KeyCode _leftKey = KeyCode.A;
     private KeyCode _rightKey = KeyCode.D;
     private CharacterController _cc;
+    private LevelBuilder _levelBuilder;
 
     void Start()
     {
         _cc = GetComponent<CharacterController>();
+        _levelBuilder = LevelBuilder.current;
     }
 
     private void Update()
@@ -25,28 +27,29 @@ public class Player : MonoBehaviour
     {
         //float movementAmount = Time.deltaTime * MovementSpeed;
         //Vector3 movement = Vector3.zero;
+        Vector3 desiredPosition = transform.position;
 
         if (Input.GetKeyDown(_upKey))
         {
-            transform.position += transform.forward;
-            //movement += transform.forward;
+            desiredPosition += transform.forward;
         }
         if (Input.GetKeyDown(_downKey))
         {
-            transform.position -= transform.forward;
-            //movement -= transform.forward;
+            desiredPosition -= transform.forward;
         }
         if (Input.GetKeyDown(_leftKey))
         {
-            transform.position -= transform.right;
-            //movement -= transform.right;
+            desiredPosition -= transform.right;
         }
         if (Input.GetKeyDown(_rightKey))
         {
-            transform.position += transform.right;
-            //movement += transform.right;
+            desiredPosition += transform.right;
         }
 
-        //_cc.SimpleMove(movement * movementAmount);
+        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(desiredPosition))
+        {
+            transform.position = desiredPosition;
+        }
+        // TODO else play bump animation?
     }
 }
