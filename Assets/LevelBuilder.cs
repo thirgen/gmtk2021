@@ -108,7 +108,6 @@ public class LevelBuilder : MonoBehaviour
         return null;
     }
 
-
     public bool IsValidMove(Vector3Int position)
     {
         if (position.x < 0 || position.x >= tileMap.GetLength(0))
@@ -117,6 +116,7 @@ public class LevelBuilder : MonoBehaviour
             return false;
         return !tileMap[position.x, position.z].BlockMovement;
     }
+
     public bool IsValidMove(Vector3 position)
     {
         return IsValidMove(new Vector3Int((int)position.x, 0, (int)position.z));

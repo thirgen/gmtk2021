@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
         HandleInput();
     }
 
-    // todo make 
+    // todo make increments smallers for more accurate left/right movements
     void HandleInput()
     {
         //float movementAmount = Time.deltaTime * MovementSpeed;
@@ -30,19 +30,19 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(_upKey))
         {
-            desiredPosition -= transform.right;
+            desiredPosition -= Vector3.right;
         }
         if (Input.GetKeyDown(_downKey))
         {
-            desiredPosition += transform.right;
+            desiredPosition += Vector3.right;
         }
         if (Input.GetKeyDown(_leftKey))
         {
-            desiredPosition -= transform.forward;
+            desiredPosition -= Vector3.forward;
         }
         if (Input.GetKeyDown(_rightKey))
         {
-            desiredPosition += transform.forward;
+            desiredPosition += Vector3.forward;
         }
 
         if (transform.position != desiredPosition && _levelBuilder.IsValidMove(desiredPosition))
