@@ -24,26 +24,30 @@ public class Player : MonoBehaviour
 
     void HandleInput()
     {
-        float movementAmount = Time.deltaTime * MovementSpeed;
-        Vector3 movement = Vector3.zero;
+        //float movementAmount = Time.deltaTime * MovementSpeed;
+        //Vector3 movement = Vector3.zero;
 
-        if (Input.GetKey(_upKey))
+        if (Input.GetKeyDown(_upKey))
         {
-            movement += transform.forward;
+            transform.position += transform.forward;
+            //movement += transform.forward;
         }
-        if (Input.GetKey(_downKey))
+        if (Input.GetKeyDown(_downKey))
         {
-            movement -= transform.forward;
+            transform.position -= transform.forward;
+            //movement -= transform.forward;
         }
-        if (Input.GetKey(_leftKey))
+        if (Input.GetKeyDown(_leftKey))
         {
-            movement -= transform.right;
+            transform.position -= transform.right;
+            //movement -= transform.right;
         }
-        if (Input.GetKey(_rightKey))
+        if (Input.GetKeyDown(_rightKey))
         {
-            movement += transform.right;
+            transform.position += transform.right;
+            //movement += transform.right;
         }
 
-        _cc.SimpleMove(movement * movementAmount);
+        //_cc.SimpleMove(movement * movementAmount);
     }
 }
