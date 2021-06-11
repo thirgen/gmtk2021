@@ -78,7 +78,7 @@ public class LevelBuilder : MonoBehaviour
 
                 var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 go.transform.SetParent(currentParent.transform);
-                go.transform.position = new Vector3(z, -1f, -x);
+                go.transform.position = new Vector3(x, -1f + currentTile.Height, z);
                 go.name = $"{z}";
 
                 Material m = currentTile.Material;
@@ -111,12 +111,11 @@ public class LevelBuilder : MonoBehaviour
 
     public bool IsValidMove(Vector3Int position)
     {
-        if (position.x < 0 || position.x > tileMap.GetLength(0))
+        if (position.x < 0 || position.x >= tileMap.GetLength(0))
             return false;
-        if (position.y < 0 || position.y > tileMap.GetLength(1))
+        if (position.z < 0 || position.z >= tileMap.GetLength(1))
             return false;
-        Debug.Log(position);
-        return tileMap[position.x, position.z].BlockMovement;
+        return !tileMap[position.x, position.z].BlockMovement;
     }
     public bool IsValidMove(Vector3 position)
     {

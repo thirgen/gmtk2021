@@ -1,7 +1,5 @@
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(Rigidbody))]
 public class Player : MonoBehaviour
 {
 
@@ -23,6 +21,7 @@ public class Player : MonoBehaviour
         HandleInput();
     }
 
+    // todo make 
     void HandleInput()
     {
         //float movementAmount = Time.deltaTime * MovementSpeed;
@@ -31,19 +30,19 @@ public class Player : MonoBehaviour
 
         if (Input.GetKeyDown(_upKey))
         {
-            desiredPosition += transform.forward;
+            desiredPosition -= transform.right;
         }
         if (Input.GetKeyDown(_downKey))
         {
-            desiredPosition -= transform.forward;
+            desiredPosition += transform.right;
         }
         if (Input.GetKeyDown(_leftKey))
         {
-            desiredPosition -= transform.right;
+            desiredPosition -= transform.forward;
         }
         if (Input.GetKeyDown(_rightKey))
         {
-            desiredPosition += transform.right;
+            desiredPosition += transform.forward;
         }
 
         if (transform.position != desiredPosition && _levelBuilder.IsValidMove(desiredPosition))

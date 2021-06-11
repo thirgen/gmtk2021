@@ -6,4 +6,5 @@ public struct TileType
     public char Id;
     public Material Material;
     public bool BlockMovement;
+    public int Height;
 }
