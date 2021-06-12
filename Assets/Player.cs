@@ -45,11 +45,11 @@ public class Player : MoveableEntity
         {
             DesireMoveDown();
         }
-        if (Input.GetKey(_rightKey) && CanMoveZ)
+        if (Input.GetKey(_rightKey))
         {
             DesireMoveRight();
         }
-        if (Input.GetKey(_leftKey) && CanMoveZ)
+        if (Input.GetKey(_leftKey))
         {
             DesireMoveLeft();
         }
