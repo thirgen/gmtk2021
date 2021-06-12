@@ -18,6 +18,7 @@ public class Enemy : MonoBehaviour
 
     public void HandleHit()
     {
+        // todo actually do something
         var render = GetComponent<SpriteRenderer>();
         if (render != null)
             render.enabled = false;
