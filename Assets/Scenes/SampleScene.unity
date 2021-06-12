@@ -162,11 +162,6 @@ MonoBehaviour:
     Material: {fileID: 2100000, guid: e512a31d6c5794a4f881f01f66c88cf4, type: 2}
     BlockMovement: 1
     Height: 1
-  NullTile:
-    Id: 33
-    Material: {fileID: 0}
-    BlockMovement: 1
-    Height: 0
 --- !u!4 &271062133
 Transform:
   m_ObjectHideFlags: 0
@@ -192,6 +187,7 @@ GameObject:
   - component: {fileID: 519923915}
   - component: {fileID: 519923916}
   - component: {fileID: 519923913}
+  - component: {fileID: 519923912}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -199,6 +195,25 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!95 &519923912
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519923911}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 23a1338c08333584c8db84d41ce01d3a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &519923913
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -277,6 +292,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ZDelay: 0.025
+  DashCooldown: 0.25
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
