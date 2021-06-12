@@ -119,6 +119,7 @@ public class LevelBuilder : MonoBehaviour
 
     public bool IsValidMove(Vector3 position)
     {
-        return IsValidMove(new Vector3Int((int)position.x, 0, (int)position.z));
+        //return IsValidMove(new Vector3Int((int)position.x, 0, (int)position.z));
+        return IsValidMove(new Vector3Int(Mathf.RoundToInt(position.x), 0, Mathf.RoundToInt(position.z)));
     }
 }

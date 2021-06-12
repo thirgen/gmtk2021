@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public float MoveSpeed = 10f;
 
     private KeyCode _upKey = KeyCode.W;
     private KeyCode _downKey = KeyCode.S;
@@ -24,7 +25,7 @@ public class Player : MonoBehaviour
     // todo make increments smallers for more accurate left/right movements
     void HandleInput()
     {
-        //float movementAmount = Time.deltaTime * MovementSpeed;
+        float movementAmount = Time.deltaTime * MoveSpeed;
         //Vector3 movement = Vector3.zero;
         Vector3 desiredPosition = transform.position;
 
@@ -36,18 +37,31 @@ public class Player : MonoBehaviour
         {
             desiredPosition += Vector3.right;
         }
-        if (Input.GetKeyDown(_leftKey))
+
+        int desiredZ = 0;
+        if (Input.GetKey(_rightKey))
         {
-            desiredPosition -= Vector3.forward;
+            // if moving right, round up
+            desiredPosition += Vector3.forward * movementAmount;
+            //desiredPosition += (Vector3.forward / 2f) * movementAmount;
+            desiredZ = Mathf.CeilToInt(desiredPosition.z);
+            //desiredZ += Vector3.forward.z * movementAmount;
         }
-        if (Input.GetKeyDown(_rightKey))
+        else if (Input.GetKey(_leftKey))
         {
-            desiredPosition += Vector3.forward;
+            // if moving left, round down
+            desiredPosition -= Vector3.forward * movementAmount;
+            //desiredPosition -= (Vector3.forward / 2f) * movementAmount;
+            desiredZ = Mathf.FloorToInt(desiredPosition.z);
+            //desiredZ -= Vector3.forward.z * movementAmount;
         }
 
-        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(desiredPosition))
+        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(new Vector3Int((int)desiredPosition.x, 0, desiredZ)))
         {
+            Debug.Log($"{desiredZ}, {desiredPosition}, {Mathf.RoundToInt(desiredPosition.z)}");
+            //desiredPosition.z = desiredZ;
             transform.position = desiredPosition;
+            
         }
         // TODO else play bump animation?
     }
