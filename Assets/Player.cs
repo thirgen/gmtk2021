@@ -24,6 +24,7 @@ public class Player : MonoBehaviour
     private KeyCode _leftDashKey = KeyCode.LeftArrow;
     private KeyCode _rightDashKey = KeyCode.RightArrow;
     private LevelBuilder _levelBuilder;
+    private EnemyManager _enemyManager;
     private Animator _animator;
 
     /// <summary>
@@ -39,6 +40,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         _levelBuilder = LevelBuilder.current;
+        _enemyManager = EnemyManager.current;
         _animator = GetComponent<Animator>();
     }
 
@@ -94,11 +96,13 @@ public class Player : MonoBehaviour
         {
             if (_levelBuilder.IsValidMove(desiredPosition))
             {
+                Vector3 oldPos = transform.position;
                 transform.position = desiredPosition;
                 _lastZMove = Time.time;
                 if (isDashing)
                 {
                     // play dash animation
+                    _enemyManager.HandlePlayerDash(oldPos, desiredPosition);
                     _animator.SetTrigger("Dash");
                 }
             }
