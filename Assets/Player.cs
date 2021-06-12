@@ -3,6 +3,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float MoveSpeed = 10f;
+    public float XYDelay = 0.2f;
 
     private KeyCode _upKey = KeyCode.W;
     private KeyCode _downKey = KeyCode.S;
@@ -10,6 +11,7 @@ public class Player : MonoBehaviour
     private KeyCode _rightKey = KeyCode.D;
     private CharacterController _cc;
     private LevelBuilder _levelBuilder;
+    private float _lastXYMove = 0f;
 
     void Start()
     {
@@ -28,7 +30,7 @@ public class Player : MonoBehaviour
         float movementAmount = Time.deltaTime * MoveSpeed;
         //Vector3 movement = Vector3.zero;
         Vector3 desiredPosition = transform.position;
-
+        
         if (Input.GetKeyDown(_upKey))
         {
             desiredPosition -= Vector3.right;
@@ -38,7 +40,37 @@ public class Player : MonoBehaviour
             desiredPosition += Vector3.right;
         }
 
-        int desiredZ = 0;
+        int desiredZ = Mathf.RoundToInt(desiredPosition.z);
+        if (Input.GetKey(_rightKey) && CanMoveXY)
+        {
+            // if moving right, round up
+            desiredPosition += Vector3.forward / 4f;
+            _lastXYMove = Time.time;
+        }
+        else if (Input.GetKey(_leftKey) && CanMoveXY)
+        {
+            // if moving left, round down
+            desiredPosition -= Vector3.forward / 4f;
+            _lastXYMove = Time.time;
+        }
+
+        Vector3Int temp = new Vector3Int((int)desiredPosition.x, 0, desiredZ);
+        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(desiredPosition))
+        {
+            Debug.Log($"{desiredZ}, {desiredPosition}, {Mathf.RoundToInt(desiredPosition.z)},   {temp}");
+            //desiredPosition.z = desiredZ;
+            transform.position = desiredPosition;
+            
+        }
+        // TODO else play bump animation?
+    }
+
+    private bool CanMoveXY => Time.time - _lastXYMove > XYDelay;
+
+    private void x()
+    {
+        /*
+        int desiredZ = Mathf.RoundToInt(desiredPosition.z);
         if (Input.GetKey(_rightKey))
         {
             // if moving right, round up
@@ -56,13 +88,14 @@ public class Player : MonoBehaviour
             //desiredZ -= Vector3.forward.z * movementAmount;
         }
 
-        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(new Vector3Int((int)desiredPosition.x, 0, desiredZ)))
+        Vector3Int temp = new Vector3Int((int)desiredPosition.x, 0, desiredZ);
+        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(temp))
         {
-            Debug.Log($"{desiredZ}, {desiredPosition}, {Mathf.RoundToInt(desiredPosition.z)}");
+            Debug.Log($"{desiredZ}, {desiredPosition}, {Mathf.RoundToInt(desiredPosition.z)},   {temp}");
             //desiredPosition.z = desiredZ;
             transform.position = desiredPosition;
-            
+
         }
-        // TODO else play bump animation?
+        */
     }
 }
