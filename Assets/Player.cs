@@ -3,11 +3,6 @@ using UnityEngine;
 [RequireComponent(typeof(Animator))]
 public class Player : MoveableEntity
 {
-    /// <summary>
-    /// Time in seconds in between movements along the Z axis (left/right).
-    /// </summary>
-    [Tooltip("Time in seconds in between movements along the Z axis (left/right).")]
-    public float ZDelay = 0.025f;
 
     /// <summary>
     /// The minimum time in seconds in between dash attacks.
@@ -23,23 +18,17 @@ public class Player : MoveableEntity
     private KeyCode _downDashKey = KeyCode.DownArrow;
     private KeyCode _leftDashKey = KeyCode.LeftArrow;
     private KeyCode _rightDashKey = KeyCode.RightArrow;
-    private LevelBuilder _levelBuilder;
     private EnemyManager _enemyManager;
     private Animator _animator;
-
-    /// <summary>
-    /// The time of the last successful movement along the Z axis.
-    /// </summary>
-    private float _lastZMove = 0f;
 
     /// <summary>
     /// The time of the last successful dash.
     /// </summary>
     private float _lastDash = 0f;
+    private bool _isDashing;
 
-    void Start()
+    private void Start()
     {
-        _levelBuilder = LevelBuilder.current;
         _enemyManager = EnemyManager.current;
         _animator = GetComponent<Animator>();
     }
@@ -53,6 +42,7 @@ public class Player : MoveableEntity
     {
         desiredPosition = transform.position;
 
+        #region Basic movement
         // todo ability to hold down key for up/down movements?
         if (Input.GetKeyDown(_upKey))
         {
@@ -62,56 +52,47 @@ public class Player : MoveableEntity
         {
             DesireMoveDown();
         }
-
         if (Input.GetKey(_rightKey) && CanMoveZ)
         {
             DesireMoveRight();
         }
         if (Input.GetKey(_leftKey) && CanMoveZ)
         {
-
             DesireMoveLeft();
         }
+        #endregion
 
 
+        #region Dashing
         // Dash will move the player 1.5f along the z axis. No dashing up/down
-        bool isDashing = false;
+        _isDashing = false;
         Vector3 zDash = Vector3.forward * 2f;
         if (Input.GetKeyDown(_rightDashKey) && CanDash)
         {
             desiredPosition += zDash;
             _lastDash = Time.time;
-            isDashing = true;
+            _isDashing = true;
         }
         if (Input.GetKeyDown(_leftDashKey) && CanDash)
         {
             desiredPosition -= zDash;
             _lastDash = Time.time;
-            isDashing = true;
+            _isDashing = true;
         }
+        #endregion
 
-        if (transform.position != desiredPosition)
-        {
-            if (_levelBuilder.IsValidMove(desiredPosition))
-            {
-                Vector3 oldPos = transform.position;
-                transform.position = desiredPosition;
-                _lastZMove = Time.time;
-                if (isDashing)
-                {
-                    // play dash animation
-                    _enemyManager.HandlePlayerDash(oldPos, desiredPosition);
-                    _animator.SetTrigger("Dash");
-                }
-            }
-            // TODO else play bump animation?
-        }
+        MoveToDesiredPosition();
     }
 
-    /// <summary>
-    /// Returns true if it has been longer than <see cref="ZDelay"/> since the last successful move along the Z axis
-    /// </summary>
-    private bool CanMoveZ => Time.time - _lastZMove > ZDelay;
+    protected override void DashCode(Vector3 oldPos, Vector3 newPos)
+    {
+        if (_isDashing)
+        {
+            // play dash animation
+            _enemyManager.HandlePlayerDash(oldPos, newPos);
+            _animator.SetTrigger("Dash");
+        }
+    }
 
     /// <summary>
     /// Returns true if it has been longer than <see cref="DashCooldown"/> since the last attempted dash
