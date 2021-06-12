@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveableEntity : MonoBehaviour
+public abstract class MoveableEntity : MonoBehaviour
 {
     /// <summary>
     /// Time in seconds in between movements along the Z axis (left/right).
@@ -35,6 +35,16 @@ public class MoveableEntity : MonoBehaviour
     protected void DesireMoveRight() => desiredPosition += _zMovement;
     protected void DesireMoveLeft() => desiredPosition -= _zMovement;
 
+
+    protected virtual void Update()
+    {
+        desiredPosition = transform.position;
+        MovementCode();
+        MoveToDesiredPosition();
+    }
+
+    protected abstract void MovementCode();
+
     /// <summary>
     /// Check to see if <see cref="desiredPosition"/> if it is a valid position.
     /// </summary>
@@ -58,5 +68,5 @@ public class MoveableEntity : MonoBehaviour
     /// </summary>
     /// <param name="oldPos"></param>
     /// <param name="newPos"></param>
-    protected virtual void DashCode(Vector3 oldPos, Vector3 newPos) { }
+    protected abstract void DashCode(Vector3 oldPos, Vector3 newPos);
 }

@@ -18,7 +18,6 @@ public class EnemyManager : MonoBehaviour
         current = this;
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         if (EnemyPrefab == null)

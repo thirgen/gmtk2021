@@ -33,15 +33,8 @@ public class Player : MoveableEntity
         _animator = GetComponent<Animator>();
     }
 
-    private void Update()
+    protected override void MovementCode()
     {
-        HandleInput();
-    }
-
-    void HandleInput()
-    {
-        desiredPosition = transform.position;
-
         #region Basic movement
         // todo ability to hold down key for up/down movements?
         if (Input.GetKeyDown(_upKey))
@@ -80,8 +73,6 @@ public class Player : MoveableEntity
             _isDashing = true;
         }
         #endregion
-
-        MoveToDesiredPosition();
     }
 
     protected override void DashCode(Vector3 oldPos, Vector3 newPos)
