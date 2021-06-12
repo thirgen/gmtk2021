@@ -5,10 +5,20 @@ public class LevelBuilder : MonoBehaviour
 {
     public static LevelBuilder current;
 
+    [Tooltip("The text to generate the level from")]
     public TextAsset level;
     public TileType[] Tiles;
-    public TileType NullTile = new TileType { Id = '!', BlockMovement = true, Material = null };
+    /// <summary>
+    /// The tilemap created based on the data in <see cref="level"/>.
+    /// </summary>
     public TileType[,] tileMap;
+
+
+    /// <summary>
+    /// The default tile.
+    /// <para>Used as padding when the data in <see cref="level"/> is not perfectly rectangular.</para>
+    /// </summary>
+    private readonly TileType _nullTile = new TileType { Id = '!', BlockMovement = true, Material = null };
 
 
     private void Awake()
@@ -38,6 +48,11 @@ public class LevelBuilder : MonoBehaviour
         Build();
     }
 
+    /// <summary>
+    /// Calculates the bounds of the level based on the text in <paramref name="lines"/>,
+    /// the instantiates <see cref="tileMap"/> to the correct size.
+    /// </summary>
+    /// <param name="lines"></param>
     private void CalcLevelBounds(string[] lines)
     {
         int xBound = lines.Length;
@@ -51,6 +66,10 @@ public class LevelBuilder : MonoBehaviour
         tileMap = new TileType[xBound, zBound];
     }
 
+    /// <summary>
+    /// Populates the data of <see cref="tileMap"/> based on <paramref name="lines"/>.
+    /// </summary>
+    /// <param name="lines"></param>
     private void PopulateTilemap(string[] lines)
     {
         for (int x = 0; x < tileMap.GetLength(0); x++)
@@ -58,11 +77,14 @@ public class LevelBuilder : MonoBehaviour
             string currentLine = lines[x];
             for (int z = 0; z < tileMap.GetLength(1); z++)
             {
-                tileMap[x, z] = (z >= currentLine.Length) ? NullTile : GetTileType(currentLine[z]);
+                tileMap[x, z] = (z >= currentLine.Length) ? _nullTile : GetTileType(currentLine[z]);
             }
         }
     }
 
+    /// <summary>
+    /// Iterates through <see cref="tileMap"/> and creates GameObjects based on the loaded values.
+    /// </summary>
     private void Build()
     {
         for (int x = 0; x < tileMap.GetLength(0); x++)
@@ -72,7 +94,7 @@ public class LevelBuilder : MonoBehaviour
             for (int z = 0; z < tileMap.GetLength(1); z++)
             {
                 TileType currentTile = tileMap[x, z];
-                if (currentTile.Id == NullTile.Id) continue;
+                if (currentTile.Id == _nullTile.Id) continue;
 
                 var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 go.transform.SetParent(currentParent.transform);
@@ -93,7 +115,7 @@ public class LevelBuilder : MonoBehaviour
             if (t.Id == c)
                 return t;
         }
-        return NullTile;
+        return _nullTile;
     }
 
     private bool IsValidMove(Vector3Int position)

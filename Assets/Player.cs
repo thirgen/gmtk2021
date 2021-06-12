@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    /// <summary>
+    /// Time in seconds in between movements along the Z axis (left/right)
+    /// </summary>
+    [Tooltip("Time in seconds in between movements along the Z axis (left/right)")]
     public float ZDelay = 0.025f;
 
     private KeyCode _upKey = KeyCode.W;
@@ -9,6 +13,10 @@ public class Player : MonoBehaviour
     private KeyCode _leftKey = KeyCode.A;
     private KeyCode _rightKey = KeyCode.D;
     private LevelBuilder _levelBuilder;
+
+    /// <summary>
+    /// The time of the last successful movement along the Z axis
+    /// </summary>
     private float _lastZMove = 0f;
 
     void Start()
@@ -47,12 +55,15 @@ public class Player : MonoBehaviour
             desiredPosition -= zMovement;
         }
 
-        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(desiredPosition))
+        if (transform.position != desiredPosition)
         {
-            transform.position = desiredPosition;
-            _lastZMove = Time.time;
+            if (_levelBuilder.IsValidMove(desiredPosition))
+            {
+                transform.position = desiredPosition;
+                _lastZMove = Time.time;
+            }
+            // TODO else play bump animation?
         }
-        // TODO else play bump animation?
     }
 
     /// <summary>
