@@ -2,20 +2,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    public float MoveSpeed = 10f;
-    public float XYDelay = 0.2f;
+    public float ZDelay = 0.025f;
 
     private KeyCode _upKey = KeyCode.W;
     private KeyCode _downKey = KeyCode.S;
     private KeyCode _leftKey = KeyCode.A;
     private KeyCode _rightKey = KeyCode.D;
-    private CharacterController _cc;
     private LevelBuilder _levelBuilder;
-    private float _lastXYMove = 0f;
+    private float _lastZMove = 0f;
 
     void Start()
     {
-        _cc = GetComponent<CharacterController>();
         _levelBuilder = LevelBuilder.current;
     }
 
@@ -24,13 +21,11 @@ public class Player : MonoBehaviour
         HandleInput();
     }
 
-    // todo make increments smallers for more accurate left/right movements
     void HandleInput()
     {
-        float movementAmount = Time.deltaTime * MoveSpeed;
-        //Vector3 movement = Vector3.zero;
         Vector3 desiredPosition = transform.position;
-        
+
+        // todo ability to hold down key for up/down movements?
         if (Input.GetKeyDown(_upKey))
         {
             desiredPosition -= Vector3.right;
@@ -40,62 +35,28 @@ public class Player : MonoBehaviour
             desiredPosition += Vector3.right;
         }
 
-        int desiredZ = Mathf.RoundToInt(desiredPosition.z);
-        if (Input.GetKey(_rightKey) && CanMoveXY)
+
+        // Moves along the Z axis (left/right) in increments of 0.25f
+        Vector3 zMovement = Vector3.forward / 4f;
+        if (Input.GetKey(_rightKey) && CanMoveZ)
         {
-            // if moving right, round up
-            desiredPosition += Vector3.forward / 4f;
-            _lastXYMove = Time.time;
+            desiredPosition += zMovement;
         }
-        else if (Input.GetKey(_leftKey) && CanMoveXY)
+        if (Input.GetKey(_leftKey) && CanMoveZ)
         {
-            // if moving left, round down
-            desiredPosition -= Vector3.forward / 4f;
-            _lastXYMove = Time.time;
+            desiredPosition -= zMovement;
         }
 
-        Vector3Int temp = new Vector3Int((int)desiredPosition.x, 0, desiredZ);
         if (transform.position != desiredPosition && _levelBuilder.IsValidMove(desiredPosition))
         {
-            Debug.Log($"{desiredZ}, {desiredPosition}, {Mathf.RoundToInt(desiredPosition.z)},   {temp}");
-            //desiredPosition.z = desiredZ;
             transform.position = desiredPosition;
-            
+            _lastZMove = Time.time;
         }
         // TODO else play bump animation?
     }
 
-    private bool CanMoveXY => Time.time - _lastXYMove > XYDelay;
-
-    private void x()
-    {
-        /*
-        int desiredZ = Mathf.RoundToInt(desiredPosition.z);
-        if (Input.GetKey(_rightKey))
-        {
-            // if moving right, round up
-            desiredPosition += Vector3.forward * movementAmount;
-            //desiredPosition += (Vector3.forward / 2f) * movementAmount;
-            desiredZ = Mathf.CeilToInt(desiredPosition.z);
-            //desiredZ += Vector3.forward.z * movementAmount;
-        }
-        else if (Input.GetKey(_leftKey))
-        {
-            // if moving left, round down
-            desiredPosition -= Vector3.forward * movementAmount;
-            //desiredPosition -= (Vector3.forward / 2f) * movementAmount;
-            desiredZ = Mathf.FloorToInt(desiredPosition.z);
-            //desiredZ -= Vector3.forward.z * movementAmount;
-        }
-
-        Vector3Int temp = new Vector3Int((int)desiredPosition.x, 0, desiredZ);
-        if (transform.position != desiredPosition && _levelBuilder.IsValidMove(temp))
-        {
-            Debug.Log($"{desiredZ}, {desiredPosition}, {Mathf.RoundToInt(desiredPosition.z)},   {temp}");
-            //desiredPosition.z = desiredZ;
-            transform.position = desiredPosition;
-
-        }
-        */
-    }
+    /// <summary>
+    /// Returns true if it has been longer than ZDelay since the last attempted move along the Z axis
+    /// </summary>
+    private bool CanMoveZ => Time.time - _lastZMove > ZDelay;
 }

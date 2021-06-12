@@ -7,10 +7,8 @@ public class LevelBuilder : MonoBehaviour
 
     public TextAsset level;
     public TileType[] Tiles;
-    public char[,] tileMapo;
     public TileType NullTile = new TileType { Id = '!', BlockMovement = true, Material = null };
     public TileType[,] tileMap;
-    private static readonly char NULL_CHAR = '!';
 
 
     private void Awake()
@@ -98,17 +96,7 @@ public class LevelBuilder : MonoBehaviour
         return NullTile;
     }
 
-    private Material GetMaterial(char ch)
-    {
-        foreach(TileType t in Tiles)
-        {
-            if (t.Id == ch)
-                return t.Material;
-        }
-        return null;
-    }
-
-    public bool IsValidMove(Vector3Int position)
+    private bool IsValidMove(Vector3Int position)
     {
         if (position.x < 0 || position.x >= tileMap.GetLength(0))
             return false;
@@ -117,6 +105,11 @@ public class LevelBuilder : MonoBehaviour
         return !tileMap[position.x, position.z].BlockMovement;
     }
 
+    /// <summary>
+    /// Checks that position is not out of bounds, and the block is allowed to be walked on
+    /// </summary>
+    /// <param name="position"></param>
+    /// <returns></returns>
     public bool IsValidMove(Vector3 position)
     {
         //return IsValidMove(new Vector3Int((int)position.x, 0, (int)position.z));
