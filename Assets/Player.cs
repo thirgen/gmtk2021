@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
-public class Player : MonoBehaviour
+public class Player : MoveableEntity
 {
     /// <summary>
     /// Time in seconds in between movements along the Z axis (left/right).
@@ -51,28 +51,26 @@ public class Player : MonoBehaviour
 
     void HandleInput()
     {
-        Vector3 desiredPosition = transform.position;
+        desiredPosition = transform.position;
 
         // todo ability to hold down key for up/down movements?
         if (Input.GetKeyDown(_upKey))
         {
-            desiredPosition -= Vector3.right;
+            DesireMoveUp();
         }
         if (Input.GetKeyDown(_downKey))
         {
-            desiredPosition += Vector3.right;
+            DesireMoveDown();
         }
 
-
-        // Moves along the Z axis (left/right) in increments of 0.25f
-        Vector3 zMovement = Vector3.forward / 4f;
         if (Input.GetKey(_rightKey) && CanMoveZ)
         {
-            desiredPosition += zMovement;
+            DesireMoveRight();
         }
         if (Input.GetKey(_leftKey) && CanMoveZ)
         {
-            desiredPosition -= zMovement;
+
+            DesireMoveLeft();
         }
 
 
