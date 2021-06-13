@@ -45,7 +45,7 @@ namespace Levels
                 return TileLocation.VerticalMiddle;
             }
 
-            // top (Down = true, Up = false
+            // top
             if ((t & Up) == Up)
             {
                 // Left
@@ -70,73 +70,134 @@ namespace Levels
                     return TileLocation.TopRight;
                 }
 
-                // middle
-                if ((t & (Left | Right)) == (Left | Right))
+                // corners
+                if ((t & (Bl | Br)) == (Bl | Br))
+                    return TileLocation.TopMiddle01;
+                if ((t & Bl) == Bl)
+                    return TileLocation.TopMiddle0;
+                if ((t & Br) == Br)
+                    return TileLocation.TopMiddle1;
+
+                // else no corners
+                return TileLocation.TopMiddle;
+            }
+
+
+            // bottom
+            if ((t & Down) == Down)
+            {
+                // Left
+                if ((t & Left) == Left)
                 {
                     // corners
-                    if ((t & (Bl | Br)) == (Bl | Br))
-                        return TileLocation.TopMiddle01;
-                    if ((t & Bl) == Bl)
-                        return TileLocation.TopMiddle0;
-                    if ((t & Br) == Br)
-                        return TileLocation.TopMiddle1;
+                    if ((t & Tr) == Tr)
+                        return TileLocation.BottomLeft2;
 
                     // else no corners
-                    return TileLocation.TopMiddle;
+                    return TileLocation.BottomLeft;
                 }
 
+                // Right
+                if ((t & Right) == Right)
+                {
+                    // corners
+                    if ((t & Tl) == Tl)
+                        return TileLocation.BottomRight3;
 
+                    // else no corners
+                    return TileLocation.BottomRight;
+                }
 
+                // corners
+                if ((t & (Tl | Tr)) == (Tl | Tr))
+                    return TileLocation.BottomMiddle23;
+                if ((t & Tl) == Tl)
+                    return TileLocation.BottomMiddle3;
+                if ((t & Tr) == Tr)
+                    return TileLocation.BottomMiddle2;
+
+                // else no corners
+                return TileLocation.BottomMiddle;
             }
 
-            if ((t | None) == None)
-                return TileLocation.Middle;
+
+            // middle-left
+            if ((t & Left) == Left)
+            {
+                // corners
+                if ((t & (Br | Tr)) == (Br | Tr))
+                    return TileLocation.MiddleLeft12;
+                if ((t & Br) == Br)
+                    return TileLocation.MiddleLeft1;
+                if ((t & Tr) == Tr)
+                    return TileLocation.MiddleLeft2;
+
+                // else no corners
+                return TileLocation.MiddleLeft;
+            }
+
+            // middle-right
+            if ((t & Right) == Right)
+            {
+                // corners
+                if ((t & (Bl | Tl)) == (Bl | Tl))
+                    return TileLocation.MiddleRight03;
+                if ((t & Bl) == Bl)
+                    return TileLocation.MiddleRight0;
+                if ((t & Tl) == Tl)
+                    return TileLocation.MiddleRight3;
+
+                // else no corners
+                return TileLocation.MiddleRight;
+            }
+
+            // middle corners
+
+            // bottom left - 0
+            if ((t & Bl) == Bl)
+            {
+                if ((t & (Br | Tr | Tl)) == (Br | Tr | Tl))
+                    return TileLocation.Middle0123;
+                if ((t & (Tr | Tl)) == (Tr | Tl))
+                    return TileLocation.Middle023;
+                if ((t & (Br | Tl)) == (Br | Tl))
+                    return TileLocation.Middle013;
+                if ((t & (Br | Tr)) == (Br | Tr))
+                    return TileLocation.Middle012;
+                if ((t & Tl) == Tl)
+                    return TileLocation.Middle03;
+                if ((t & Tr) == Tr)
+                    return TileLocation.Middle02;
+                if ((t & Br) == Br)
+                    return TileLocation.Middle01;
+
+                return TileLocation.Middle0;
+            }
+            // bottom right - 1
+            if ((t & Br) == Br)
+            {
+                if ((t & (Tr | Tl)) == (Tr | Tl))
+                    return TileLocation.Middle123;
+                if ((t & Tl) == Tl)
+                    return TileLocation.Middle13;
+                if ((t & Tr) == Tr)
+                    return TileLocation.Middle12;
+
+                return TileLocation.Middle1;
+            }
+            // top right - 2
+            if ((t & Tr) == Tr)
+            {
+                if ((t & Tl) == Tl)
+                    return TileLocation.Middle23;
+
+                return TileLocation.Middle2;
+            }
+            // top left - 3
+            if ((t & Tl) == Tl)
+                return TileLocation.Middle3;
 
             return TileLocation.Middle;
-
-
-            switch (t)
-            {
-                /*
-                case TileLocationFromAdjacent.Square:
-                    return TileLocation.Square;
-                case TileLocationFromAdjacent.HorizontalLeft:
-                    return TileLocation.HorizontalLeft;
-                case TileLocationFromAdjacent.HorizontalRight:
-                    return TileLocation.HorizontalRight;
-                case TileLocationFromAdjacent.HorizontalMiddle:
-                    return TileLocation.HorizontalMiddle;
-
-                case TileLocationFromAdjacent.VerticalTop:
-                    return TileLocation.VerticalTop;
-                case TileLocationFromAdjacent.TopLeft:
-                    return TileLocation.TopLeft;
-                case TileLocationFromAdjacent.TopRight:
-                    return TileLocation.TopRight;
-                case TileLocationFromAdjacent.TopMiddle:
-                    return TileLocation.TopMiddle;
-
-                case TileLocationFromAdjacent.VerticalBottom:
-                    return TileLocation.VerticalBottom;
-                case TileLocationFromAdjacent.BottomLeft:
-                    return TileLocation.BottomLeft;
-                case TileLocationFromAdjacent.BottomRight:
-                    return TileLocation.BottomRight;
-                case TileLocationFromAdjacent.BottomMiddle:
-                    return TileLocation.BottomMiddle;
-
-                case TileLocationFromAdjacent.VerticalMiddle:
-                    return TileLocation.VerticalMiddle;
-                case TileLocationFromAdjacent.MiddleLeft:
-                    return TileLocation.MiddleLeft;
-                case TileLocationFromAdjacent.MiddleRight:
-                    return TileLocation.MiddleRight;
-                case TileLocationFromAdjacent.Middle:
-                    return TileLocation.Middle;
-                    */
-                default:
-                    throw new System.ArgumentOutOfRangeException(t.ToString());
-            }
         }
     }
 }
