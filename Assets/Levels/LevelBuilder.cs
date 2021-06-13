@@ -184,14 +184,14 @@ namespace Levels
             //   l   D   k
 
             // all 4 adjacent are good? then middle
-            bool up = IsSameTexture(x - 1, z, currentTile);
-            bool down = IsSameTexture(x + 1, z, currentTile);
-            bool left = IsSameTexture(x, z - 1, currentTile);
-            bool right = IsSameTexture(x, z + 1, currentTile);
-            bool i = IsSameTexture(x - 1, z - 1, currentTile);
-            bool j = IsSameTexture(x - 1, z + 1, currentTile);
-            bool k = IsSameTexture(x + 1, z + 1, currentTile);
-            bool l = IsSameTexture(x + 1, z - 1, currentTile);
+            bool up = !IsSameTexture(x - 1, z, currentTile);
+            bool down = !IsSameTexture(x + 1, z, currentTile);
+            bool left = !IsSameTexture(x, z - 1, currentTile);
+            bool right = !IsSameTexture(x, z + 1, currentTile);
+            bool i = !IsSameTexture(x - 1, z - 1, currentTile);
+            bool j = !IsSameTexture(x - 1, z + 1, currentTile);
+            bool k = !IsSameTexture(x + 1, z + 1, currentTile);
+            bool l = !IsSameTexture(x + 1, z - 1, currentTile);
 
             // udlr
             // 0000 -> Square
@@ -212,6 +212,7 @@ namespace Levels
             // 1111 -> Middle
 
             int move = 0;
+            /*
             move += (right) ? 1 : 0;
             move += ((left) ? 1 : 0) << 1;
             move += ((down) ? 1 : 0) << 2;
@@ -221,29 +222,23 @@ namespace Levels
             move += ((j) ? 1 : 0) << 5;
             move += ((k) ? 1 : 0) << 6;
             move += ((l) ? 1 : 0) << 7;
+            */
 
-            // ijkl
-            // 0000 -> n/a
-            // 0001 -> HorizontalLeft
-            // 0010 -> HorizontalRight
-            // 0011 -> HorizontalMiddle
-            // 0100 -> VerticalTop
-            // 0101 -> TopLeft
-            // 0110 -> TopRight
-            // 0111 -> TopMiddle
-            // 1000 -> VerticalBottom
-            // 1001 -> BottomLeft
-            // 1010 -> BottomRight
-            // 1011 -> BottomMiddle
-            // 1100 -> VerticalMiddle
-            // 1101 -> MiddleLeft
-            // 1110 -> MiddleRight
-            // 1111 -> Middle
+            string num = "";
+            num += (l) ? (byte)1 : (byte)0;
+            num += (k) ? (byte)1 : (byte)0;
+            num += (j) ? (byte)1 : (byte)0;
+            num += (i) ? (byte)1 : (byte)0;
+            num += (up) ? (byte)1 : (byte)0;
+            num += (down) ? (byte)1 : (byte)0;
+            num += (left) ? (byte)1 : (byte)0;
+            num += (right) ? (byte)1 : (byte)0;
+            move = Convert.ToInt32(num, 2);
 
             try
             {
                 TileLocationShit t = (TileLocationShit)move;
-                Debug.Log($"({x},{z}): {Convert.ToString((int)t, 2)}");
+                Debug.Log($"({x},{z}): {Convert.ToString((int)t, 2)}  {move & 0b11111111}");
                 return t.Convert();
             }
             catch (Exception)

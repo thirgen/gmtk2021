@@ -13,29 +13,63 @@ namespace Levels
 
         public static TileLocation Convert(this TileLocationShit t)
         {
+            TileLocationShit udlr = Up | Down | Left | Right;
+            TileLocationShit ud = Up | Down;
+            TileLocationShit lr = Left | Right;
+            TileLocationShit udl = Up | Down | Left;
+            TileLocationShit udr = Up | Down | Right;
+            TileLocationShit ulr = Up | Left | Right;
+            TileLocationShit dlr = Down | Left | Right;
+
             // square - corners dont matter
-            if ((t | None) == None)
+            if ((t & udlr) == udlr)
                 return TileLocation.Square;
 
             // horizontals - corners dont matter
-            if ((t | Right) == Right)
-                return TileLocation.HorizontalLeft;
-            if ((t | Left) == Left)
-                return TileLocation.HorizontalRight;
-            if ((t & (Left | Right | Up | Down)) == (Left | Right))
+            if ((t & ud) == ud)
+            {
+                if ((t & Right) == Right)
+                    return TileLocation.HorizontalRight;
+                if ((t & Left) == Left)
+                    return TileLocation.HorizontalLeft;
                 return TileLocation.HorizontalMiddle;
+            }
 
             // verticals - corners dont matter
-            if ((t | Down) == Down)
-                return TileLocation.VerticalTop;
-            if ((t | Up) == Up)
-                return TileLocation.VerticalBottom;
-            if ((t & (Up | Down | Left | Right)) == (Up | Down))
+            if ((t & lr) == lr)
+            {
+                if ((t & Down) == Down)
+                    return TileLocation.VerticalBottom;
+                if ((t & Up) == Up)
+                    return TileLocation.VerticalTop;
                 return TileLocation.VerticalMiddle;
+            }
 
             // top (Down = true, Up = false
-            if ((t & (Down | Up)) == Down)
+            if ((t & Up) == Up)
             {
+                // Left
+                if ((t & Left) == Left)
+                {
+                    // corners
+                    if ((t & Br) == Br)
+                        return TileLocation.TopLeft1;
+
+                    // else no corners
+                    return TileLocation.TopLeft;
+                }
+
+                // Right
+                if ((t & Right) == Right)
+                {
+                    // corners
+                    if ((t & Bl) == Bl)
+                        return TileLocation.TopRight0;
+
+                    // else no corners
+                    return TileLocation.TopRight;
+                }
+
                 // middle
                 if ((t & (Left | Right)) == (Left | Right))
                 {
@@ -51,29 +85,12 @@ namespace Levels
                     return TileLocation.TopMiddle;
                 }
 
-                // Left
-                if ((t & Right) == Right)
-                {
-                    // corners
-                    if ((t & Br) == Br)
-                        return TileLocation.TopLeft1;
 
-                    // else no corners
-                    return TileLocation.TopLeft;
-                }
-
-                // Right
-                if ((t & Left) == Left)
-                {
-                    // corners
-                    if ((t & Bl) == Bl)
-                        return TileLocation.TopRight0;
-
-                    // else no corners
-                    return TileLocation.TopRight;
-                }
 
             }
+
+            if ((t | None) == None)
+                return TileLocation.Middle;
 
             return TileLocation.Middle;
 

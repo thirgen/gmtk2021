@@ -59,7 +59,7 @@ namespace Levels
         MiddleRight = 0b1110,
         Middle = 0b1111
     }
-
+    
     [Flags]
     public enum TileLocationShit
     {
