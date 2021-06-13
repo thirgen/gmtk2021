@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -7,6 +8,10 @@ namespace Levels
     public class LevelBuilder : MonoBehaviour
     {
         public static LevelBuilder current;
+
+#if UNITY_EDITOR
+        public bool DebugMode = true;
+#endif
 
         [Tooltip("The text to generate the level from")]
         public TextAsset level;
@@ -107,6 +112,13 @@ namespace Levels
 
                     TileLocation tl = GetTileLocation(x, z, currentTile);
 
+#if UNITY_EDITOR
+                    if (DebugMode)
+                    {
+                        var sssssss = go.AddComponent<DebugGO>();
+                        sssssss.tl = tl;
+                    }
+#endif
                     var spriteRenderer = go.AddComponent<SpriteRenderer>();
                     spriteRenderer.sprite = currentTile.SpriteManager[tl];
                     //Material m = currentTile.Material;
@@ -154,7 +166,7 @@ namespace Levels
             return false;
         }
 
-        #region Texture stuff
+#region Texture stuff
         private bool IsSameTexture(int x, int z, TileType currentTile)
         {
             if (IsOutOfBounds(x, z))
@@ -162,28 +174,24 @@ namespace Levels
             return tileMap[x, z] == currentTile;
         }
 
-
         // todo rename tileLocation to something more fitting
         private TileLocation GetTileLocation(int x, int z, TileType currentTile)
         {
+            //   i   U   j
+            //      ___
+            //   L  | |  R
+            //      ---
+            //   l   D   k
+
             // all 4 adjacent are good? then middle
-            // bool up = IsValidMove(new Vector3Int(x - 1, 0, z));
-            // bool down = IsValidMove(new Vector3Int(x + 1, 0, z));
-            // bool left = IsValidMove(new Vector3Int(x, 0, z - 1));
-            // bool right = IsValidMove(new Vector3Int(x, 0, z + 1));
             bool up = IsSameTexture(x - 1, z, currentTile);
             bool down = IsSameTexture(x + 1, z, currentTile);
             bool left = IsSameTexture(x, z - 1, currentTile);
             bool right = IsSameTexture(x, z + 1, currentTile);
-
-            //   w   U   x
-            //      ___
-            //   L  | |  R
-            //      ---
-            //   y   D   z
-            //
-
-
+            bool i = IsSameTexture(x - 1, z - 1, currentTile);
+            bool j = IsSameTexture(x - 1, z + 1, currentTile);
+            bool k = IsSameTexture(x + 1, z + 1, currentTile);
+            bool l = IsSameTexture(x + 1, z - 1, currentTile);
 
             // udlr
             // 0000 -> Square
@@ -209,9 +217,33 @@ namespace Levels
             move += ((down) ? 1 : 0) << 2;
             move += ((up) ? 1 : 0) << 3;
 
+            move += (i) ? 1 : 0 << 4;
+            move += ((j) ? 1 : 0) << 5;
+            move += ((k) ? 1 : 0) << 6;
+            move += ((l) ? 1 : 0) << 7;
+
+            // ijkl
+            // 0000 -> n/a
+            // 0001 -> HorizontalLeft
+            // 0010 -> HorizontalRight
+            // 0011 -> HorizontalMiddle
+            // 0100 -> VerticalTop
+            // 0101 -> TopLeft
+            // 0110 -> TopRight
+            // 0111 -> TopMiddle
+            // 1000 -> VerticalBottom
+            // 1001 -> BottomLeft
+            // 1010 -> BottomRight
+            // 1011 -> BottomMiddle
+            // 1100 -> VerticalMiddle
+            // 1101 -> MiddleLeft
+            // 1110 -> MiddleRight
+            // 1111 -> Middle
+
             try
             {
-                TileLocationFromAdjacent t = (TileLocationFromAdjacent)move;
+                TileLocationShit t = (TileLocationShit)move;
+                Debug.Log($"({x},{z}): {Convert.ToString((int)t, 2)}");
                 return t.Convert();
             }
             catch (Exception)
@@ -220,7 +252,15 @@ namespace Levels
                 return TileLocation.Middle;
             }
         }
-        #endregion
+#endregion
     }
 
+
+
+#if UNITY_EDITOR
+        public class DebugGO : MonoBehaviour
+        {
+            public TileLocation tl;
+        }
+#endif
 }

@@ -1,4 +1,7 @@
-﻿namespace Levels
+﻿using System;
+using System.Collections.Generic;
+
+namespace Levels
 {
     /// <summary>
     /// See Textures/TilemapLayout.png for visualisation.
@@ -57,51 +60,17 @@
         Middle = 0b1111
     }
 
-    public static class TileLocationUtil
+    [Flags]
+    public enum TileLocationShit
     {
-        public static TileLocation Convert(this TileLocationFromAdjacent t)
-        {
-            switch (t)
-            {
-                case TileLocationFromAdjacent.Square:
-                    return TileLocation.Square;
-                case TileLocationFromAdjacent.HorizontalLeft:
-                    return TileLocation.HorizontalLeft;
-                case TileLocationFromAdjacent.HorizontalRight:
-                    return TileLocation.HorizontalRight;
-                case TileLocationFromAdjacent.HorizontalMiddle:
-                    return TileLocation.HorizontalMiddle;
-
-                case TileLocationFromAdjacent.VerticalTop:
-                    return TileLocation.VerticalTop;
-                case TileLocationFromAdjacent.TopLeft:
-                    return TileLocation.TopLeft;
-                case TileLocationFromAdjacent.TopRight:
-                    return TileLocation.TopRight;
-                case TileLocationFromAdjacent.TopMiddle:
-                    return TileLocation.TopMiddle;
-
-                case TileLocationFromAdjacent.VerticalBottom:
-                    return TileLocation.VerticalBottom;
-                case TileLocationFromAdjacent.BottomLeft:
-                    return TileLocation.BottomLeft;
-                case TileLocationFromAdjacent.BottomRight:
-                    return TileLocation.BottomRight;
-                case TileLocationFromAdjacent.BottomMiddle:
-                    return TileLocation.BottomMiddle;
-
-                case TileLocationFromAdjacent.VerticalMiddle:
-                    return TileLocation.VerticalMiddle;
-                case TileLocationFromAdjacent.MiddleLeft:
-                    return TileLocation.MiddleLeft;
-                case TileLocationFromAdjacent.MiddleRight:
-                    return TileLocation.MiddleRight;
-                case TileLocationFromAdjacent.Middle:
-                    return TileLocation.Middle;
-
-                default:
-                    throw new System.ArgumentOutOfRangeException(t.ToString());
-            }
-        }
+        None = 0b0000,
+        Right = 0b0001,
+        Left = 0b0010,
+        Down = 0b0100,
+        Up = 0b1000,
+        Tl = 0b0001_0000, // corner 3
+        Tr = 0b0010_0000, // corner 2
+        Br = 0b0100_0000, // corner 1
+        Bl = 0b1000_0000 // corner 0
     }
 }
