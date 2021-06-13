@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Levels;
 using UnityEngine;
 
 public abstract class MoveableEntity : MonoBehaviour

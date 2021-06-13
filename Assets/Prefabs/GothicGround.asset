@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 71010eb029ea9b74ca58b0484138df78, type: 3}
+  m_Name: GothicGround
+  m_EditorClassIdentifier: 
+  tiles:
+  - Id: 60
+    Name: topLeft
+    Material: {fileID: 0}
+    Sprite: {fileID: 8585432036595075214, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 95
+    Name: topMiddle
+    Material: {fileID: 0}
+    Sprite: {fileID: 9044254282873223538, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 62
+    Name: topRight
+    Material: {fileID: 0}
+    Sprite: {fileID: 6054302811138738368, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 91
+    Name: middleLeft
+    Material: {fileID: 0}
+    Sprite: {fileID: 6802809538192277907, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 120
+    Name: middleMiddle
+    Material: {fileID: 0}
+    Sprite: {fileID: -3649793099690839455, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 93
+    Name: middleRight
+    Material: {fileID: 0}
+    Sprite: {fileID: 5474115388856907617, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 40
+    Name: bottomLeft
+    Material: {fileID: 0}
+    Sprite: {fileID: -5489214792256539756, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 45
+    Name: bottomMiddle
+    Material: {fileID: 0}
+    Sprite: {fileID: 8677890536204054141, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 41
+    Name: bottomRight
+    Material: {fileID: 0}
+    Sprite: {fileID: 1318681950552224875, guid: 48239c92fe6df6643a7f10a24a453a0c, type: 3}
+    BlockMovement: 0
+    Height: 0
+  - Id: 111
+    Name: lllll
+    Material: {fileID: 0}
+    Sprite: {fileID: 8438986397778739647, guid: 56e23dfe7ea69004e8d2220f5c53a618, type: 3}
+    BlockMovement: 1
+    Height: 0
