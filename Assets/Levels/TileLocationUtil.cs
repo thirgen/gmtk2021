@@ -1,25 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Levels.TileLocationShit;
-//using J = Levels.TileLocationShit;
+﻿using static Levels.TileLocationFlags;
 
 namespace Levels
 {
     public static class TileLocationUtil
     {
-
-        public static TileLocation Convert(this TileLocationShit t)
+        // todo break up into smaller methods
+        /// <summary>
+        /// Changes the Flag bases <see cref="TileLocationFlags"/> into the
+        /// tilesheet-order based <see cref="TileLocation"/>.
+        /// </summary>
+        public static TileLocation Convert(this TileLocationFlags t)
         {
-            TileLocationShit udlr = Up | Down | Left | Right;
-            TileLocationShit ud = Up | Down;
-            TileLocationShit lr = Left | Right;
-            TileLocationShit udl = Up | Down | Left;
-            TileLocationShit udr = Up | Down | Right;
-            TileLocationShit ulr = Up | Left | Right;
-            TileLocationShit dlr = Down | Left | Right;
+            TileLocationFlags udlr = Up | Down | Left | Right;
+            TileLocationFlags ud = Up | Down;
+            TileLocationFlags lr = Left | Right;
 
             // square - corners dont matter
             if ((t & udlr) == udlr)
